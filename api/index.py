@@ -1,3 +1,3 @@
 from anctl.wsgi import application
 
-app = application
+app = applications
