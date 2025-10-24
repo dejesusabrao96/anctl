@@ -115,18 +115,20 @@ WSGI_APPLICATION = 'anctl.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'mysql.connector.django',
         'NAME': 'railway',
         'USER': 'root',
         'PASSWORD': 'LjeAxXgvZZtQexdNkwRSULHeAovLpAhY',
         'HOST': 'shortline.proxy.rlwy.net',
         'PORT': '28876',
+        'OPTIONS': {
+            'autocommit': True,
+            'charset': 'utf8mb4',
+            'use_unicode': True,
+            'connect_timeout': 30,
+        }
     }
 }
-
-
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
