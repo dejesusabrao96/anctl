@@ -5,8 +5,8 @@
       "src": "anctl/wsgi.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
+        "maxLambdaSize": "15b",
+        "runtime": "python3.13"
       }
     },
     {
