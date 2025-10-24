@@ -1,13 +1,31 @@
 {
-    "builds": [{
+  "version": 2,
+  "builds": [
+    {
       "src": "anctl/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-    }],
-    "routes": [
-        { 
-            "src": "/(.*)", 
-            "dest": "anctl/wsgi.py" 
-        }
-    ]
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.9"
+      }
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "anctl/wsgi.py"
+    }
+  ],
+  "env": {
+    "PYTHONPATH": "/vercel/path0",
+    "DJANGO_SETTINGS_MODULE": "anctl.settings"
+  }
 }
