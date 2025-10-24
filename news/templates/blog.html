@@ -1,0 +1,202 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+{% load static %}
+
+<main class="main">
+<section id="blog" class="p_3">
+  <div class="container-xl">
+
+    <!-- ✅ Blog Items -->
+    <div id="blog-list" class="blog_1 row">
+      {% for i in infos %}
+      <div class="col-md-4 mb-4 blog-item">
+        <div class="blog_1i position-relative rounded-3 overflow-hidden shadow-sm">
+          <figure class="effect-jazz mb-0 position-relative">
+            <a href="{{ i.get_absolute_url }}">
+              <img src="{{ i.image.url }}" class="w-100 blog-img" alt="{{ i.title }}">
+            </a>
+
+            <div class="share-buttons position-absolute">
+              <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|slice:':-1' }}{% url 'blog_detail' i.hashed %}&text={{ i.title }}" 
+                 target="_blank" class="btn btn-sm btn-primary share-btn" title="Facebook">
+                <i class="bi bi-facebook"></i>
+              </a>
+              <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|slice:':-1' }}{% url 'blog_detail' i.hashed %}&text={{ i.title }}" 
+                 target="_blank" class="btn btn-sm btn-info share-btn" title="X (Twitter)">
+                <i class="bi bi-twitter"></i>
+              </a>
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri|slice:':-1' }}{% url 'blog_detail' i.hashed %}&title={{ i.title }}" 
+                 target="_blank" class="btn btn-sm btn-primary share-btn" title="LinkedIn">
+                <i class="bi bi-linkedin"></i>
+              </a>
+            </div>
+
+            <div class="date-badge position-absolute text-end pe-3">
+              <h6 class="mb-0 d-inline-block bg_pink text-white p-2 rounded-3 text-center small">
+                {{ i.created|date:"d" }} <br>{{ i.created|date:"M" }}
+              </h6>
+            </div>
+          </figure>
+        </div>
+
+        <div class="blog_1i_last p-4 bg_light clearfix rounded-bottom-3 shadow-sm">
+          <h6>
+            <i class="fa fa-folder-o ms-2 me-1"></i>
+            <a class="col_pink" href="#">{{ i.category.name }}</a>
+          </h6>
+          <h5 class="mt-3">
+            <a href="{{ i.get_absolute_url }}">{{ i.title }}</a>
+          </h5>
+          <p>{{ i.excerpt|truncatewords:20 }}</p>
+          <hr>
+          <h6 class="mb-0">
+            <a href="{% url 'blog_detail' i.hashed %}">Read more: {{ i.title|truncatewords:3 }}...</a>
+          </h6>
+        </div>
+      </div>
+      {% empty %}
+        <p class="text-center mt-4">No news articles available.</p>
+      {% endfor %}
+    </div>
+
+    <!-- ✅ Pagination -->
+    {% if infos.has_other_pages %}
+    <div class="pagination-container mt-5 d-flex justify-content-center">
+      <nav aria-label="Page navigation">
+        <ul class="pagination pagination-lg gap-2">
+
+          {% if infos.has_previous %}
+          <li class="page-item">
+            <a class="page-link rounded-pill shadow-sm" href="?page={{ infos.previous_page_number }}" aria-label="Previous">
+              <i class="bi bi-chevron-left"></i>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <span class="page-link rounded-pill shadow-sm"><i class="bi bi-chevron-left"></i></span>
+          </li>
+          {% endif %}
+
+          {% for num in infos.paginator.page_range %}
+            {% if num == infos.number %}
+              <li class="page-item active"><span class="page-link rounded-pill shadow-sm">{{ num }}</span></li>
+            {% elif num >= infos.number|add:'-2' and num <= infos.number|add:'2' %}
+              <li class="page-item">
+                <a class="page-link rounded-pill shadow-sm" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if infos.has_next %}
+          <li class="page-item">
+            <a class="page-link rounded-pill shadow-sm" href="?page={{ infos.next_page_number }}" aria-label="Next">
+              <i class="bi bi-chevron-right"></i>
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <span class="page-link rounded-pill shadow-sm"><i class="bi bi-chevron-right"></i></span>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+
+    <!-- ✅ Load More Button -->
+    {% if infos.has_next %}
+    <div class="text-center mt-4">
+      <button id="load-more-btn" 
+              class="btn btn-outline-primary rounded-pill px-5 py-2 shadow-sm"
+              data-next-page="{{ infos.next_page_number }}">
+        <i class="bi bi-arrow-down-circle me-2"></i> Load More News
+      </button>
+    </div>
+    {% endif %}
+    {% endif %}
+
+  </div>
+</section>
+
+<!-- ✅ JS for "Load More" -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  const paginationContainer = document.querySelector('.pagination-container');
+  if (!loadMoreBtn) return;
+
+  loadMoreBtn.addEventListener('click', function() {
+    // Hide paginator after first "Load More" click
+    if (paginationContainer) paginationContainer.style.display = 'none';
+
+    const nextPage = this.getAttribute('data-next-page');
+    if (!nextPage) return;
+
+    fetch(`?page=${nextPage}`)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newPosts = doc.querySelectorAll('.blog-item');
+        const blogList = document.getElementById('blog-list');
+
+        newPosts.forEach(post => {
+          post.style.opacity = 0;
+          blogList.appendChild(post);
+          setTimeout(() => (post.style.transition = "opacity 0.6s", post.style.opacity = 1), 100);
+        });
+
+        const newButton = doc.querySelector('#load-more-btn');
+        if (newButton) {
+          this.setAttribute('data-next-page', newButton.getAttribute('data-next-page'));
+        } else {
+          this.remove();
+        }
+      });
+  });
+});
+</script>
+
+
+<!-- ✅ Styles -->
+<style>
+  .blog-img {
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+  }
+  .share-buttons {
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 10;
+  }
+  .share-btn {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    color: #fff !important;
+  }
+  .share-btn:hover { transform: scale(1.1); opacity: 0.9; }
+  .date-badge { bottom: 10px; right: 10px; }
+  .blog_1i_last { min-height: 230px; }
+  .pagination .page-link { border-radius: 50px; border: none; }
+  .pagination .page-item.active .page-link {
+    background-color: #e91e63; border-color: #e91e63;
+  }
+  #load-more-btn {
+    transition: all 0.3s ease;
+  }
+  #load-more-btn:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+</main>
+{% endblock %}

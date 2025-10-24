@@ -1,0 +1,188 @@
+{% load static %}
+<footer id="footer" class="footer light-background">
+  <div class="container footer-top">
+    <div class="row gy-4">
+      
+      <!-- About Section -->
+      <div class="col-lg-4 col-md-6 footer-about">
+        <a href="/" class="logo d-flex align-items-center">
+          <span class="sitename">ANCT-TL</span>
+        </a>
+        <p class="mt-3 mb-0">Aliança Naçional Controlo Tabaco</p>
+        <p class="mt-1">Timor-Leste</p>
+        <div class="footer-contact pt-2">
+          <p>Aitarak Laran</p>
+          <p>Rua Fatuhada, Dili, Timor-Leste</p>
+          <p class="mt-3"><strong>Phone:</strong> <span>+670-77101017</span></p>
+          <p><strong>Email:</strong> <span>aliansanasional.kontratbk15@gmail.com</span></p>
+        </div>
+        <div class="social-links d-flex mt-4 gap-2">
+        <a href="#" class="btn btn-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+          <i class="bi bi-twitter-x"></i>
+        </a>
+        <a href="#" class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a href="#" class="btn btn-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a href="#" class="btn btn-info rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+          <i class="bi bi-linkedin"></i>
+        </a>
+      </div>
+
+      </div>
+
+      <!-- Useful Links -->
+      <div class="col-lg-2 col-md-3 footer-links">
+        <h4>Useful Links</h4>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Activities</a></li>
+          <li><a href="#">Privacy policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Activity -->
+      <div class="col-lg-2 col-md-3 footer-links">
+        <h4>Our Activity</h4>
+        <ul>
+          <li><a href="#">Advocacy</a></li>
+          <li><a href="#">Awareness</a></li>
+          <li><a href="#">Community Support</a></li>
+          <li><a href="#">Campaigns</a></li>
+        </ul>
+      </div>
+
+      <!-- Interactive Map -->
+      <div class="col-lg-4 col-md-12 footer-map">
+        <h4>Our Location</h4>
+        <div class="map-container mt-3">
+          <div id="timor-leste-map"></div>
+          <p class="map-note mt-2"><small>Click to open in full map view</small></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container copyright text-center mt-4">
+    <p>© <strong class="px-1 sitename">ANCT-TL</strong> All Rights Reserved</p>
+    <div class="credits">
+      Designed by <a href="#">JX BinarySquad</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Leaflet Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+  #timor-leste-map {
+    height: 220px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  }
+  .map-note {
+    color: #666;
+    font-style: italic;
+  }
+  @media (max-width: 768px) {
+    .footer-map { margin-top: 20px; }
+  }
+
+  /* 🔵 Pulsing Circle Animation */
+  .pulse-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(44, 90, 160, 0.3);
+    transform: scale(0);
+    animation: pulse 2.5s infinite ease-out;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0); opacity: 0.7; }
+    70% { transform: scale(3); opacity: 0; }
+    100% { opacity: 0; }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const anctCoords = [-8.5536809, 125.5784093]; // ANCT-TL Location
+    // Initialize the map];
+    const map = L.map('timor-leste-map', {
+      scrollWheelZoom: false,
+      zoomControl: true,
+    }).setView(anctCoords, 13);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add marker
+    const marker = L.marker(anctCoords).addTo(map);
+    marker.bindPopup(`
+      <b>ANCT-TL Main Office</b><br>
+      Aitarak Laran, Rua Fatuhada<br>
+      Dili, Timor-Leste
+    `).openPopup();
+
+    // ⏱️ Automatically close popup after 4 seconds
+    setTimeout(() => {
+      marker.closePopup();
+    }, 4000);
+
+    // Reopen popup when marker is clicked
+    marker.on('click', function () {
+      marker.openPopup();
+    });
+    // Run fade out after map load
+    setTimeout(() => fadeAndClosePopup(marker), 500);
+    // When user reopens the popup by clicking, fade again
+    marker.on('click', function () {
+      marker.openPopup();
+      setTimeout(() => fadeAndClosePopup(marker), 500);
+    });
+    // Add operational area circle
+    const circle = L.circle(anctCoords, {
+      color: '#2c5aa0',
+      fillColor: '#2c5aa0',
+      fillOpacity: 0.15,
+      radius: 1000
+    }).addTo(map);
+
+    // Create pulsing effect overlay
+    const pulseDiv = L.divIcon({
+      className: 'pulse-circle',
+      iconSize: [20, 20]
+    });
+    L.marker(anctCoords, { icon: pulseDiv }).addTo(map);
+
+    // Click map to open OpenStreetMap
+    map.on('click', function() {
+      window.open('https://www.openstreetmap.org/#map=13/-8.5536809/125.5784093', '_blank');
+    });
+  });
+</script>
+<script>
+  // Function to fade and close popup
+  function fadeAndClosePopup(marker) {
+    const popup = marker.getPopup();
+    if (popup && popup.isOpen()) {
+      const popupElement = popup.getElement();
+      if (popupElement) {
+        popupElement.style.transition = 'opacity 1s';
+        popupElement.style.opacity = '0';
+        setTimeout(() => {
+          marker.closePopup();
+          popupElement.style.opacity = '1'; // Reset opacity for next open
+        }, 1000);
+      }
+    }
+  }

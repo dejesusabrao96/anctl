@@ -1,0 +1,94 @@
+# ===================================
+# 🐍 Python & Django Project
+# ===================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+db.sqlite3
+*.log
+local_settings.py
+media/
+staticfiles/
+static/
+*.pot
+*.pyc
+
+# Ignore environment & secrets
+.env
+.env.local
+.env.production
+.env.development
+
+# ===================================
+# 🧱 Virtual Environments
+# ===================================
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ===================================
+# 🧩 IDEs & Editors
+# ===================================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ===================================
+# 🧰 PyInstaller
+# ===================================
+*.manifest
+*.spec
+
+# ===================================
+# 🧾 Logs & Reports
+# ===================================
+*.log
+*.sql
+*.sqlite3
+*.dat
+*.bak
+*.tmp
+
+# ===================================
+# 📦 Packaging
+# ===================================
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+bin/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# ===================================
+# 🖼️ OS Generated Files
+# ===================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# ===================================
+# 🧪 Testing
+# ===================================
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+htmlcov/
+

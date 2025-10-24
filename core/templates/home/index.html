@@ -1,0 +1,596 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section position-relative overflow-hidden text-white"
+         style="min-height: 25vh;"> <!-- Reduced height to 25% of viewport -->
+
+  <!-- Background Image with Overlay -->
+  <div class="hero-bg position-absolute top-0 start-0 w-100 h-100">
+    <img src="{% static 'assets/img/smoke.jpg' %}" 
+         alt="Background smoke"
+         class="w-100 h-100 object-fit-cover"
+         style="object-position: center; filter: brightness(65%) blur(1px);">
+    <div class="overlay position-absolute top-0 start-0 w-100 h-100"
+         style="background: linear-gradient(135deg, rgba(0,0,0,0.65), rgba(40,40,40,0.45));"></div>
+  </div>
+
+  <div class="container position-relative py-3" data-aos="fade-up"> <!-- Compact padding -->
+    
+    <!-- Headline -->
+  <div class="text-center mb-3">
+      <h1 class="fw-bold text-uppercase mb-2" 
+          style="font-size: 2rem; letter-spacing: 1px; line-height: 1.2;
+                background: linear-gradient(90deg, #00c6ff, #0072ff);
+                -webkit-background-clip: text; color: transparent;
+                text-shadow: 2px 2px 6px rgba(0,0,0,0.4);" 
+          data-aos="zoom-in" data-aos-delay="100">
+        NATIONAL ALLIANCE FOR <span style="color:#fff;">TOBACCO CONTROL</span> IN TIMOR-LESTE
+      </h1>
+      <p class="text-light opacity-85 fw-semibold mb-0" 
+        style="font-size: 0.95rem; line-height: 1.5; text-shadow: 1px 1px 4px rgba(0,0,0,0.3);" 
+        data-aos="fade-down" data-aos-delay="200">
+        Tobacco is one of the leading causes of <span style="font-weight:600; color:#ffd700;">non-communicable diseases</span> and <span style="font-weight:600; color:#ffd700;">tuberculosis</span>.
+      </p>
+    </div>
+    <div class="row gy-3 justify-content-center">
+
+      <!-- About Box -->
+      <div class="col-lg-4" data-aos="fade-right" data-aos-delay="250">
+        <div class="p-3 rounded-4 shadow-sm h-100 position-relative"
+             style="background: rgba(255,255,255,0.1);
+                    border: 1px solid rgba(255,255,255,0.2);
+                    backdrop-filter: blur(8px);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;"
+             onmouseover="this.style.transform='scale(1.02)'; this.style.boxShadow='0 4px 10px rgba(255,255,255,0.15)'"
+             onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
+
+          <h3 class="fw-bold text-white text-center mb-2 fs-6">ANCT - TL</h3>
+          <p class="text-light small text-center mb-2">
+            “ANCT-TL was established with the goal of reducing tobacco use in Timor-Leste.”
+          </p>
+
+          <ul class="small text-light ps-3" style="line-height: 1.5;">
+            <li>📘 Educating communities on tobacco’s health and economic harms.</li>
+            <li>⚖️ Advocating for stronger enforcement of the Tobacco Law.</li>
+            <li>🤝 Building capacity among civil societies and youth.</li>
+            <li>🏛️ Partnering with Government and Parliament.</li>
+            <li>🔬 Conducting impactful health and economic research.</li>
+            <li>🌍 Collaborating for effective prevention programs.</li>
+          </ul>
+
+          <div class="position-absolute top-0 start-0 w-100 h-100"
+               style="background: radial-gradient(circle at top left, rgba(255,255,255,0.2), transparent 60%);
+                      pointer-events: none;"></div>
+        </div>
+      </div>
+
+      <!-- Vision & Mission -->
+      <div class="col-lg-8 d-flex align-items-stretch">
+        <div class="row w-100 gy-3">
+
+          <!-- Vision -->
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="p-3 rounded-4 text-center shadow-sm h-100"
+                 style="background: rgba(255,255,255,0.15);
+                        border: 1px solid rgba(255,255,255,0.3);
+                        backdrop-filter: blur(8px);
+                        transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='scale(1.02)';"
+                 onmouseout="this.style.transform='scale(1)'">
+              <div class="icon mb-2">
+                <i class="bi bi-clipboard-data fs-4 text-info"></i>
+              </div>
+              <h4 class="fw-bold text-white mb-1 fs-6">Our Vision</h4>
+              <p class="text-light small mb-0">
+                “A Community Free of Disease and Death Due to Tobacco.”
+              </p>
+            </div>
+          </div>
+
+          <!-- Mission -->
+          <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="p-3 rounded-4 text-center shadow-sm h-100"
+                 style="background: rgba(255,255,255,0.15);
+                        border: 1px solid rgba(255,255,255,0.3);
+                        backdrop-filter: blur(8px);
+                        transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='scale(1.02)';"
+                 onmouseout="this.style.transform='scale(1)'">
+              <div class="icon mb-2">
+                <i class="bi bi-gem fs-4 text-success"></i>
+              </div>
+              <h4 class="fw-bold text-white mb-1 fs-6">Our Mission</h4>
+              <p class="text-light small mb-0">
+                “Empowering Communities to Reduce Tobacco Use in Timor-Leste.”
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+    <!-- News Section -->
+  
+<section id="news" class="news section py-5" style="background: #f8f9fc;">
+  <div class="container">
+
+    <!-- Section Title -->
+    <div class="section-title text-center mb-5" data-aos="fade-up">
+      <h2 class="fw-bold display-5 text-dark">Latest News & Updates</h2>
+      <p class="lead text-muted">Stay informed about our latest activities and tobacco control efforts in Timor-Leste</p>
+      <div class="title-divider mx-auto mt-3"></div>
+    </div>
+
+    <!-- 🔍 Search Form -->
+    <div class="row mb-5" data-aos="fade-up" data-aos-delay="100">
+      <div class="col-12 d-flex justify-content-center">
+        <form method="get" class="d-flex w-100 justify-content-center" role="search" style="max-width:720px;">
+          <div class="input-group shadow-sm">
+            <input name="q" value="{{ query }}" type="search" class="form-control form-control-lg" placeholder="Search news, topics or excerpts..." aria-label="Search">
+            <button class="btn btn-primary px-4" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+      {% if query %}
+      <p class="text-center text-muted mt-3">
+        Showing {{ results_count }} result{{ results_count|pluralize }} for "<strong>{{ query }}</strong>"
+      </p>
+      {% endif %}
+    </div>
+
+    <!-- News Cards -->
+    <div class="blog_1 row">
+      {% for i in infos %}
+      <div class="col-md-4 mb-4">
+        <div class="blog_1i position-relative rounded-3 overflow-hidden shadow-sm">
+          <figure class="effect-jazz mb-0 position-relative">
+            <a href="{{ i.get_absolute_url }}">
+              <img src="{{ i.image.url }}" class="w-100 blog-img" alt="{{ i.title }}">
+            </a>
+
+            <!-- Floating Social Share Buttons -->
+            <div class="share-buttons position-absolute">
+              <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|slice:':-1' }}{% url 'blog_detail' i.hashed %}&text={{ i.title }}" 
+                 target="_blank" 
+                 class="btn btn-sm btn-primary share-btn" 
+                 title="Share on Facebook">
+                <i class="bi bi-facebook"></i>
+              </a>
+              <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|slice:':-1' }}{% url 'blog_detail' i.hashed %}&text={{ i.title }}" 
+                 target="_blank" 
+                 class="btn btn-sm btn-info share-btn" 
+                 title="Share on X (Twitter)">
+                <i class="bi bi-twitter"></i>
+              </a>
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri|slice:':-1' }}{% url 'blog_detail' i.hashed %}&title={{ i.title }}" 
+                 target="_blank" 
+                 class="btn btn-sm btn-primary share-btn" 
+                 title="Share on LinkedIn">
+                <i class="bi bi-linkedin"></i>
+              </a>
+            </div>
+
+            <div class="date-badge position-absolute text-end pe-3">
+              <h6 class="mb-0 d-inline-block bg_pink text-white p-2 rounded-3 text-center small">
+                {{ i.created|date:"d" }} <br>{{ i.created|date:"M" }}
+              </h6>
+            </div>
+          </figure>
+        </div>
+
+        <div class="blog_1i_last p-4 bg_light clearfix rounded-bottom-3 shadow-sm">
+          <h6>
+            <i class="fa fa-folder-o ms-2 me-1"></i>
+            <a class="col_pink" href="#">{{ i.category.name }}</a>
+          </h6>
+          <h5 class="mt-3">
+            <a href="{{ i.get_absolute_url }}">{{ i.title }}</a>
+          </h5>
+          <p>{{ i.excerpt|truncatewords:20 }}</p>
+          <hr>
+          <h6 class="mb-0">
+            <a href="{% url 'blog_detail' i.hashed %}">Read more: {{ i.title|truncatewords:3 }}...</a>
+          </h6>
+        </div>
+      </div>
+      {% empty %}
+      <div class="text-center text-muted py-5">
+        <h5>No news found for "<strong>{{ query }}</strong>"</h5>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if infos.has_other_pages %}
+    <div class="pagination-container mt-5 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200">
+      <nav aria-label="News pagination">
+        <ul class="pagination pagination-lg gap-2">
+          {% if infos.has_previous %}
+          <li class="page-item">
+            <a class="page-link rounded-pill shadow-sm" href="?page={{ infos.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Previous">
+              <i class="bi bi-chevron-left"></i>
+            </a>
+          </li>
+          {% endif %}
+
+          {% for num in infos.paginator.page_range %}
+          {% if infos.number == num %}
+          <li class="page-item active"><span class="page-link rounded-pill shadow-sm">{{ num }}</span></li>
+          {% elif num > infos.number|add:'-3' and num < infos.number|add:'3' %}
+          <li class="page-item"><a class="page-link rounded-pill shadow-sm" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a></li>
+          {% endif %}
+          {% endfor %}
+
+          {% if infos.has_next %}
+          <li class="page-item">
+            <a class="page-link rounded-pill shadow-sm" href="?page={{ infos.next_page_number }}{% if query %}&q={{ query }}{% endif %}" aria-label="Next">
+              <i class="bi bi-chevron-right"></i>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+    {% endif %}
+
+    <!-- View All Button -->
+    <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="300">
+      <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-semibold shadow-sm view-all-btn">
+        View All News <i class="bi bi-arrow-right ms-2"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Styles -->
+<style>
+  .blog-img {
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+  }
+  .share-buttons {
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 10;
+  }
+  .share-btn {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    color: #fff !important;
+  }
+  .share-btn:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+  .date-badge {
+    bottom: 10px;
+    right: 10px;
+  }
+  .blog_1i_last {
+    min-height: 230px;
+  }
+  .blog_1i_last h5 a {
+    color: #333;
+    text-decoration: none;
+  }
+  .blog_1i_last h5 a:hover {
+    color: #e91e63;
+  }
+</style>
+
+
+    <!-- /News Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+      <div class="container">
+        <div class="row gy-4 gx-5">
+          <div class="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="200">
+            <img src="{% static 'assets/img/abou.jpg' %}" class="img-fluid rounded-4" alt="">
+            <a href="https://www.youtube.com/watch?v=QjlrMmrdBy8" class="glightbox pulsating-play-btn"></a>
+          </div>
+
+          <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
+            <h3>About ANCT - TL</h3>
+            <p>
+              The National Alliance for Tobacco Control in Timor-Leste (ANCT-TL) is a coalition of organizations and individuals committed to reducing tobacco use and its harmful effects in our nation. Through education, advocacy, and community engagement, we work towards a healthier future for all Timorese.
+            </p>
+            
+          </div>
+        </div>
+      </div>
+    </section><!-- /About Section -->
+
+    <!-- Team Section -->
+    <section id="partner" class="team section py-5 bg-light">
+      <div class="container section-title text-center" data-aos="fade-up">
+        <h2>Our Partner</h2>
+        <p class="lead text-muted">Meet our dedicated partner of tobacco control initiatives</p>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div id="teamCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          </div>
+          
+          <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+              <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                      <img src="{% static 'assets/img/img.jpeg' %}" class="rounded-circle mb-3" alt="Dr. Maria Soares" width="150" height="150">
+                      <h5 class="card-title fw-bold">Aliansa Nacional Controlo Tabaco</h5>
+                      <p class="card-text small">Public health specialist with 15 years of experience in tobacco control policy and advocacy.</p>
+                      <div class="social mt-3">
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-linkedin"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                      <img src="{% static 'assets/img/img.jpeg' %}" class="rounded-circle mb-3" alt="João da Costa" width="150" height="150">
+                      <h5 class="card-title fw-bold">Aliansa Nacional Controlo Tabaco</h5>
+                      <p class="card-text small">Community development expert focused on youth engagement and education programs.</p>
+                      <div class="social mt-3">
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-linkedin"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                      <img src="{% static 'assets/img/img.jpeg' %}" class="rounded-circle mb-3" alt="Ana Martins" width="150" height="150">
+                      <h5 class="card-title fw-bold">Aliansa Nacional Controlo Tabaco</h5>
+                      <p class="card-text small">Epidemiologist specializing in tobacco-related disease research and data analysis.</p>
+                      <div class="social mt-3">
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-linkedin"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+              <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                      <img src="{% static 'assets/img/img.jpeg' %}" class="rounded-circle mb-3" alt="Carlos Alves" width="150" height="150">
+                      <h5 class="card-title fw-bold">Aliansa Nacional Controlo Tabaco</h5>
+                      <p class="card-text small">Legal expert with extensive experience in public health policy development and implementation.</p>
+                      <div class="social mt-3">
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-linkedin"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                      <img src="{% static 'assets/img/img.jpeg' %}" class="rounded-circle mb-3" alt="Teresa Fernandes" width="150" height="150">
+                      <h5 class="card-title fw-bold">Aliansa Nacional Controlo Tabaco</h5>
+                      <p class="card-text small">Strategic communications specialist developing awareness campaigns and media relations.</p>
+                      <div class="social mt-3">
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-linkedin"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 mb-4">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                      <img src="{% static 'assets/img/img.jpeg' %}" class="rounded-circle mb-3" alt="Rui Pereira" width="150" height="150">
+                      <h5 class="card-title fw-bold">Aliansa Nacional Controlo Tabaco</h5>
+                      <p class="card-text small">Ensuring organizational sustainability and effective resource management for our programs.</p>
+                      <div class="social mt-3">
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-decoration-none text-muted me-2"><i class="bi bi-linkedin"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carousel Controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#teamCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#teamCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </section><!-- /Team Section -->
+
+    <!-- Report Section -->
+    <section id="report" class="report section py-5 bg-light">
+        <div class="container text-center" data-aos="fade-up">
+
+          <!-- Section Title -->
+          <div class="mb-5">
+            <h2 class="fw-bold text-dark mb-3">🚭 Report Tobacco Violations</h2>
+          </div>
+
+          <!-- Card with Button -->
+          <div class="card shadow border-0 mx-auto" style="max-width: 500px;" data-aos="fade-up" data-aos-delay="300">
+            <div class="card-body py-5">
+              <i class="bi bi-exclamation-triangle-fill text-danger display-4 mb-3"></i>
+              <h4 class="fw-bold mb-3">Take Action Now!</h4>
+              <p class="text-muted mb-4">
+                Click on the button bellow to access our reports on tobacco violations.
+              </p>
+              <a href="{% url 'lista_relatoriu' %}" class="btn btn-danger btn-lg rounded-pill px-5">
+                <i class="bi bi-clipboard-data me-2"></i> View Report Table
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    <!-- /Report Section -->  
+
+
+
+
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section py-5" style="background: linear-gradient(135deg, #f7f9fc 0%, #e9ecef 100%);">
+      <div class="container section-title text-center mb-5" data-aos="fade-up">
+        <h2 class="fw-bold text-dark mb-2">Contact Us</h2>
+        <p class="text-muted">We'd love to hear from you! Reach out for details, support, or collaboration.</p>
+      </div>
+
+      <!-- Google Maps -->
+      <div class="container mb-5" data-aos="fade-up" data-aos-delay="200">
+        <div class="rounded-4 overflow-hidden shadow-sm">
+          <iframe
+            style="border:0; width:100%; height:300px;"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126362.2323383647!2d125.4958806!3d-8.5568566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2b4c1e6e2e2e2e2f%3A0x2b4c1e6e2e2e2e2f!2sDili%2C%20Timor-Leste!5e0!3m2!1sen!2sus!4v1720960000000!5m2!1sen!2sus"
+            frameborder="0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-5">
+          <!-- Contact Info -->
+          <div class="col-lg-4">
+            <div class="info-item d-flex align-items-start bg-white shadow-sm p-4 rounded-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+              <i class="bi bi-geo-alt fs-3 text-primary me-3"></i>
+              <div>
+                <h5 class="fw-semibold">Location</h5>
+                <p class="text-muted mb-0">Rua de Moçambique, Dili, Timor-Leste</p>
+              </div>
+            </div>
+
+            <div class="info-item d-flex align-items-start bg-white shadow-sm p-4 rounded-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+              <i class="bi bi-telephone fs-3 text-success me-3"></i>
+              <div>
+                <h5 class="fw-semibold">Call Us</h5>
+                <p class="text-muted mb-0">+670 333 1234</p>
+              </div>
+            </div>
+
+            <div class="info-item d-flex align-items-start bg-white shadow-sm p-4 rounded-4" data-aos="fade-up" data-aos-delay="400">
+              <i class="bi bi-envelope fs-3 text-danger me-3"></i>
+              <div>
+                <h5 class="fw-semibold">Email Us</h5>
+                <p class="text-muted mb-0">info@anct-tl.org</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="col-lg-8">
+            <form action="" method="POST" class="contact-form bg-white shadow p-5 rounded-4" data-aos="fade-up" data-aos-delay="200">
+              {% csrf_token %}
+              <div class="row gy-4">
+                <div class="col-md-6">
+                  <input type="text" class="form-control border-0 border-bottom rounded-0 shadow-none py-2" name="name" placeholder="Your Name" required>
+                </div>
+
+                <div class="col-md-6">
+                  <input type="email" class="form-control border-0 border-bottom rounded-0 shadow-none py-2" name="email" placeholder="Your Email" required>
+                </div>
+
+                <div class="col-md-12">
+                  <input type="text" class="form-control border-0 border-bottom rounded-0 shadow-none py-2" name="subject" placeholder="Subject" required>
+                </div>
+
+                <div class="col-md-12">
+                  <textarea class="form-control border-0 border-bottom rounded-0 shadow-none py-2" name="message" rows="6" placeholder="Message" required></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  {% if messages %}
+                  <div id="alert-container">
+                    {% for message in messages %}
+                      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+
+                  <button type="submit" class="btn btn-primary btn-lg mt-4 px-5 rounded-pill shadow-sm">
+                    <i class="bi bi-send-fill me-2"></i> Send Message
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Contact Section -->
+
+  </main>
+{% endblock %}
+
+<style>
+.hover-scale:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.25) !important;
+}
+
+</style>
+
+<script>
+  // Auto-hide alerts after 5 seconds
+  setTimeout(function () {
+    let alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+      alert.classList.remove('show');
+      alert.classList.add('fade');
+      setTimeout(() => alert.remove(), 500);
+    });
+  }, 5000);
+</script>

@@ -1,0 +1,119 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block title %}Lista Informasaun{% endblock %}
+
+{% block extra_css %}
+<!-- Bootstrap 5 DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.4/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.min.css">
+
+<style>
+  .card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+  .card-header {
+    background-color: #0d6efd;
+    color: #fff;
+    font-weight: 600;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+  .dataTables_wrapper .dataTables_filter input {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+  }
+  .btn-sm i {
+    vertical-align: middle;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">📋 Lista Informasaun</h5>
+      <a href="{% url 'addinfo' %}" class="btn btn-outline-info btn-sm shadow-sm">
+        <i class="bi bi-plus-circle"></i> Aumenta Informasaun
+      </a>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="infoTable" class="table table-striped table-hover align-middle nowrap" style="width:100%">
+          <thead class="table-primary text-center">
+            <tr>
+              <th>No</th>
+              <th>Titulu</th>
+              <th>Data Publicasaun</th>
+              <th>Category</th>
+              <th>Asaun</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in info %}
+            <tr>
+              <td class="text-center">{{ forloop.counter }}</td>
+              <td>{{ item.title }}</td>
+              <td class="text-center">{{ item.created|date:"d/m/Y" }}</td>
+              <td>{{ item.category }}</td>
+              <td class="text-center">
+                <a href="{% url 'updateinfo' item.hashed %}" class="btn btn-sm btn-warning me-1">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <a href="{% url 'deleteinfo' item.hashed %}" class="btn btn-sm btn-danger">
+                  <i class="bi bi-trash"></i>
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-muted">La iha informasaun disponivel</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+ {% block scripts %}
+<!-- DataTables CSS -->
+<link href="{% static 'main/css/style.css' %}" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<!-- JavaScript -->
+<script>
+    $(document).ready(function() {
+        $('#infoTable').DataTable({
+            "language": {
+                "lengthMenu": "Hatudu _MENU_ relatoriu",
+                "zeroRecords": "Deskulpa, la iha relatoriu",
+                "info": "Pájina _PAGE_ husi _PAGES_",
+                "infoEmpty": "La iha relatoriu",
+                "infoFiltered": "(filtradu husi _MAX_ relatoriu)",
+                "search": "Buka:",
+                "paginate": {
+                    "first": "↞",
+                    "last": "↠", 
+                    "next": "→",
+                    "previous": "←"
+                }
+            },
+            "pageLength": 10,
+            "lengthMenu": [5, 10, 20, 50],
+            "order": [[3, 'desc']],
+            "dom": '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rt<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+            "responsive": true,
+            "autoWidth": false
+        });
+    });
+</script>
+{% endblock %}

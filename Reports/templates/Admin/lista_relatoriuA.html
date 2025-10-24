@@ -1,0 +1,156 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block content %}
+ {% if messages %}
+            {% for message in messages %}
+                <div id="divmessage" class="alert alert-{{ message.tags }} alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+<div class="container">
+    <h3>Lista Relatoriu</h3>
+    
+    <!-- Filter Section - Simplified -->
+    <div class="filter-card margin-top 5">
+        <div class="filter-header">
+            <h3>📅 Filtra Relatoriu</h3>
+        </div>
+        <div class="filter-body">
+            <form method="get" class="filter-form">
+                <div class="filter-group">
+                    <label for="tinan">Hili Tinan:</label>
+                    <select name="tinan" id="tinan" class="form-select">
+                        <option value="">📋 Relatoriu Hotu</option>
+                        {% for tinan in tinan_sira %}
+                            <option value="{{ tinan }}" {% if tinan_filter == tinan|stringformat:"s" %}selected{% endif %}>
+                                🗓️ {{ tinan }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="filter-actions">
+                    <button type="submit" class="btn-filter">
+                        🔍 Filtra
+                    </button>
+                    {% if tinan_filter %}
+                        <a href="{% url 'lista_relatoriu' %}" class="btn-clear">
+                            🗑️ Hasai Filter
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
+            
+            {% if tinan_filter %}
+            <div class="filter-active">
+                <span class="active-badge">
+                    ✅ Filtradu: Relatoriu Tinan <strong>{{ tinan_filter }}</strong>
+                </span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="table-section">
+        <div class="table-card">
+            <div class="table-header">
+                <h5>📊 Lista Relatoriu</h5>
+                <span class="total-badge">{{ relatorius.count }} Relatoriu</span>
+                <a href="{% url 'addRelatoriu' %}" class="btn btn-outline-primary btn-sm ">
+                    ➕ Adisiona Relatoriu</a>
+            </div>
+            <div class="table-responsive">
+                <table id="tabela-relatorius" class="table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="25%">Títulu</th>
+                            <th width="15%">Tipu</th>
+                            <th width="15%">Data</th>
+                            <th width="25%">Deskrisaun</th>
+                            <th width="15%">Aksaun</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for relatoriu in relatorius %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{{ relatoriu.arquivu_pdf.url }}" target="_blank"><strong>{{ relatoriu.titulu }}</strong></a>
+                            </td>
+                            <td>
+                                {% if relatoriu.tipu_relatoriu %}
+                                    <span class="type-badge">{{ relatoriu.tipu_relatoriu.naran }}</span>
+                                {% else %}
+                                    <span class="type-badge none">La iha tipu</span>
+                                {% endif %}
+                            </td>
+                            <td data-order="{{ relatoriu.data_kriasaun|date:'Y-m-d' }}">
+                                📅 {{ relatoriu.data|date:"d/M/Y" }}
+                            </td>
+                            <td>
+                                <div class="description">
+                                    {{ relatoriu.deskrisaun|truncatewords:8|default:"La iha deskrisaun" }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{{ relatoriu.arquivu_pdf.url }}" class="btn-action view" target="_blank" title="Haree PDF">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ relatoriu.arquivu_pdf.url }}" class="btn-action download" download title="Download">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                    <a href="{% url 'atualiza_relatoriu' relatoriu.hashed %}" class="btn-action details" title="Update Relatoriu">
+                                      <i class="bi bi-pencil-square"></i>  
+                                    </a>
+                                    <a href="{% url 'delete_relatoriu' relatoriu.hashed %}" class="btn-action delete" title="Hamos Relatoriu"><i class="bi bi-trash"></i></a>
+                                        
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DataTables CSS -->
+<link href="{% static 'main/css/style.css' %}" rel="stylesheet">
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<!-- JavaScript -->
+<script>
+    $(document).ready(function() {
+        $('#tabela-relatorius').DataTable({
+            "language": {
+                "lengthMenu": "Hatudu _MENU_ relatoriu",
+                "zeroRecords": "Deskulpa, la iha relatoriu",
+                "info": "Pájina _PAGE_ husi _PAGES_",
+                "infoEmpty": "La iha relatoriu",
+                "infoFiltered": "(filtradu husi _MAX_ relatoriu)",
+                "search": "Buka:",
+                "paginate": {
+                    "first": "↞",
+                    "last": "↠", 
+                    "next": "→",
+                    "previous": "←"
+                }
+            },
+            "pageLength": 10,
+            "lengthMenu": [5, 10, 20, 50],
+            "order": [[3, 'desc']],
+            "dom": '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rt<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+            "responsive": true,
+            "autoWidth": false
+        });
+    });
+</script>
+{% endblock %}

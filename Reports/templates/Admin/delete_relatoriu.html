@@ -1,0 +1,310 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <header> 
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'lista_relatoriuAdmin' %}">Lista Relatóriu</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Apaga Relatóriu</li>
+        </ol>
+    </header>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-danger text-white py-4">
+                    <div class="text-center">
+                        <i class="fas fa-trash-alt fa-2x mb-3"></i>
+                        <h1 class="h3 mb-0">Konfirma Apaga Relatóriu</h1>
+                        <p class="mb-0 opacity-75">Asaun ne'e la bele fila fali</p>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4 text-center">
+                    <!-- Warning Icon -->
+                    <div class="mb-4">
+                        <i class="fas fa-exclamation-triangle fa-4x text-warning mb-3"></i>
+                    </div>
+
+                    <!-- Relatóriu Details -->
+                    <div class="alert alert-warning border-0 bg-light-warning mb-4">
+                        <h5 class="alert-heading mb-3">Ita boot hakarak apaga relatóriu ne'e:</h5>
+                        
+                        <div class="relatoriu-info text-start">
+                            <div class="mb-3 p-3 bg-white rounded border">
+                                <h4 class="text-danger fw-bold mb-2">{{ relatoriu.titulu }}</h4>
+                                
+                                <div class="row small">
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Tipu Relatóriu:</strong> 
+                                            {{ relatoriu.tipu_relatoriu|default:"La iha" }}
+                                        </p>
+                                        <p class="mb-1"><strong>Data:</strong> 
+                                            {{ relatoriu.data|date:"d/M/Y H:i"|default:"La iha" }}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Deskrisaun:</strong> 
+                                            {{ relatoriu.deskrisaun|truncatewords:15|default:"La iha" }}
+                                        </p>
+                                        <p class="mb-0"><strong>Arquivu:</strong> 
+                                            {% if relatoriu.arquivu_pdf %}
+                                                <span class="text-success">
+                                                    <i class="fas fa-file-pdf me-1"></i>Iha arquivu
+                                                </span>
+                                            {% else %}
+                                                <span class="text-muted">La iha</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Critical Warning -->
+                    <div class="alert alert-danger border-0 mb-4">
+                        <h6 class="fw-bold mb-2">
+                            <i class="fas fa-radiation me-2"></i>ATENSAUN KRÍTIKU
+                        </h6>
+                        <p class="mb-0">
+                            Relatóriu ne'e sei <strong>lakon permanentemente</strong>! 
+                            La iha maneira atu restore informasaun ne'e depois de apaga.
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <!-- Cancel Button -->
+                        <a href="{% url 'lista_relatoriuAdmin' %}" class="btn btn-success btn-lg px-4">
+                            <i class="fas fa-times me-2"></i>Kansela
+                        </a>
+                        
+                        <!-- Delete Button with Confirmation Modal -->
+                        <button type="button" class="btn btn-danger btn-lg px-4" data-bs-toggle="modal" data-bs-target="#finalConfirmModal">
+                            <i class="fas fa-trash me-2"></i>Apaga Permanente
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information Card -->
+            <div class="card mt-4 border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0 text-danger">
+                        <i class="fas fa-skull-crossbones me-2"></i>
+                        Saida mak sei lakon?
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-danger me-2"></i>
+                                    <span>Títulu relatóriu nian</span>
+                                </li>
+                                <li class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-danger me-2"></i>
+                                    <span>Deskrisaun kompletu</span>
+                                </li>
+                                <li class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-danger me-2"></i>
+                                    <span>Arquivu PDF</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-danger me-2"></i>
+                                    <span>Data relatóriu nian</span>
+                                </li>
+                                <li class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-check-circle text-danger me-2"></i>
+                                    <span>História mudansa</span>
+                                </li>
+                                <li class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-times-circle text-success me-2"></i>
+                                    <span class="text-muted">Tipu Relatóriu (sei kontinua)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup Recommendation -->
+            <div class="card mt-4 border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0 text-info">
+                        <i class="fas fa-life-ring me-2"></i>
+                        Rekomendasaun Antes Apaga
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info border-0 mb-0">
+                        <p class="mb-2">
+                            <strong>Sugestaun:</strong> Se ita boot presiza mantén informasaun ruma, 
+                            konsidera:
+                        </p>
+                        <ul class="mb-0 ps-3">
+                            <li>Download arquivu PDF antes apaga</li>
+                            <li>Foti screenshot ba informasaun importante</li>
+                            <li>Kopia títulu no deskrisaun ba faviór tempu</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Final Confirmation Modal -->
+<div class="modal fade" id="finalConfirmModal" tabindex="-1" aria-labelledby="finalConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="finalConfirmModalLabel">
+                    <i class="fas fa-bomb me-2"></i>Konfirmasaun Final
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="mb-3">
+                    <i class="fas fa-fire fa-3x text-danger"></i>
+                </div>
+                <h6 class="fw-bold mb-3">Ita boot serteza absolutu?</h6>
+                <p class="text-muted mb-4">
+                    Ne'e dala ikus atu kansela. Kuandu apaga, relatóriu 
+                    "<strong>{{ relatoriu.titulu }}</strong>" sei lakon ba sempreque.
+                </p>
+                
+                <!-- Security Check -->
+                <div class="mb-3 p-3 bg-light rounded">
+                    <label for="confirmText" class="form-label small text-muted">
+                        Hakerek <strong>APAGA</strong> atu konfirma:
+                    </label>
+                    <input type="text" class="form-control text-center" id="confirmText" 
+                           placeholder="Hakerek APAGA iha ne'e" onkeyup="checkDeleteConfirmation()">
+                    <small class="text-muted">Case-sensitive - tenke hanesan esatamente</small>
+                </div>
+
+                <!-- Final Warning -->
+                <div class="alert alert-warning border-0 small mb-0">
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    <strong>Atensaun:</strong> Asaun ne'e la bele hasai fali!
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center border-0">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-arrow-left me-2"></i>Fila
+                </button>
+                <form method="post" action="{% url 'delete_relatoriu' relatoriu.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" id="finalDeleteBtn" class="btn btn-danger px-4" disabled>
+                        <i class="fas fa-fire me-2"></i>Sin, Apaga Permanente
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function checkDeleteConfirmation() {
+    const confirmText = document.getElementById('confirmText');
+    const deleteBtn = document.getElementById('finalDeleteBtn');
+    
+    if (confirmText.value === 'APAGA') {
+        deleteBtn.disabled = false;
+        confirmText.classList.remove('is-invalid');
+        confirmText.classList.add('is-valid');
+    } else {
+        deleteBtn.disabled = true;
+        confirmText.classList.remove('is-valid');
+        confirmText.classList.add('is-invalid');
+    }
+}
+
+// Add some interactive effects
+document.addEventListener('DOMContentLoaded', function() {
+    // Add pulsing effect to delete button
+    const deleteBtn = document.querySelector('[data-bs-target="#finalConfirmModal"]');
+    setInterval(() => {
+        deleteBtn.classList.toggle('pulse-danger');
+    }, 2000);
+    
+    // Focus management
+    const finalConfirmModal = document.getElementById('finalConfirmModal');
+    finalConfirmModal.addEventListener('shown.bs.modal', function () {
+        document.getElementById('confirmText').focus();
+    });
+
+    // Add confirmation for navigating away
+    window.addEventListener('beforeunload', function (e) {
+        const confirmText = document.getElementById('confirmText');
+        if (confirmText && confirmText.value === 'APAGA') {
+            e.preventDefault();
+            e.returnValue = 'Mudansa sira sei lakon se ita boot husik pájina ne\'e. Ita boot serteza?';
+        }
+    });
+});
+
+// Prevent form resubmission
+if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+}
+</script>
+
+<style>
+.pulse-danger {
+    animation: pulse-danger 2s infinite;
+}
+
+@keyframes pulse-danger {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+.bg-light-warning {
+    background-color: rgba(255, 193, 7, 0.1) !important;
+}
+
+.card {
+    border-radius: 0.5rem;
+}
+
+.btn-lg {
+    border-radius: 0.375rem;
+    font-weight: 600;
+}
+
+.list-unstyled li {
+    padding: 0.25rem 0;
+}
+
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+.relatoriu-info {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+}
+
+.bg-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+}
+</style>
+{% endblock %}

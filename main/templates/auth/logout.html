@@ -1,0 +1,65 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block headStyle %}
+<style>
+/* Hide header on logout page */
+header, 
+nav, 
+.navbar,
+[class*="header"],
+.header-admin {
+    display: none !important;
+}
+
+/* Adjust body spacing when header is hidden */
+body {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Center the logout content properly */
+.logout-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+/* Style adjustments for logout card */
+.logout-card {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 0.5rem;
+}
+
+.logout-card .card-body {
+    padding: 3rem 2rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="logout-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-md-6 col-lg-5">
+                <div class="card logout-card pt-3 rounded">
+                    <div class="card-body text-center">
+                        <i class="fas fa-sign-out-alt fa-3x text-info mb-3"></i>
+                        <h5 class="font-weight-light my-3">You have been logged out</h5>
+                        <p class="text-muted mb-4">Thank you for using our system. You can log in again anytime.</p>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a class="btn btn-outline-info btn-sm me-md-2" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt me-2"></i>Log In Again
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

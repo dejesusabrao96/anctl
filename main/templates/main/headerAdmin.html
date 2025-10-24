@@ -1,0 +1,92 @@
+{% load static %}
+<style>
+  .contact-info i, 
+  .social-links a i {
+    color: white;
+  }
+
+  .contact-info a {
+    color: white;
+  }
+</style>
+<header id="header" class="header sticky-top">
+  <div class="header__top position-relative" style="background: url('{% static "img/header_bg.jpg" %}') center center/cover no-repeat; height: 30px;">
+
+    <div class=" d-flex align-items-center">
+      <div class="container d-flex justify-content-center justify-content-md-between">
+        <div class="contact-info d-flex align-items-center">
+          <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">contact@example.com</a></i>
+          <i class="bi bi-phone d-flex align-items-center ms-4"><span>+1 5589 55488 55</span></i>
+        </div>
+        <div class="social-links d-none d-md-flex align-items-center">
+          <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+  </div><!-- End Top Bar -->
+
+    <div class="branding d-flex align-items-center" style="background-color: #b6d1ddff;">
+
+      <div class="container position-relative d-flex align-items-center justify-content-between">
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+          <img src="{% static 'assets/img/img.JPEG' %}" alt="">
+          <h4 class="sitename">ANCT-TL</h4>
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="{% url 'home' %}" >Home Admin<br></a></li>
+            <li><a href="{% url 'news' %}">News</a></li>
+            <li><a href="{% url 'newsadmin' %}">Informasaun/Information</a></li>
+             <li><a href="{% url 'lista_relatoriuAdmin' %}">Reports/Relatoriu</a></li>            
+            <!-- Login/Logout Links -->
+            {% if user.is_authenticated %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">
+                <i class="bi bi-person-circle me-1"></i>{{ user.username }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
+                <li class="px-3 py-2 text-muted small">
+                  Signed in as <strong>{{ user.username }}</strong>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form method="post" action="{% url 'logout' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                      <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
+                <li class="px-3 py-2 text-muted small">
+                  Signed in as <strong>{{ user.username }}</strong>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form method="post" action="{% url 'logout' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                      <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
+
+            </li>
+            {% else %}
+            <li><a href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a></li>
+            {% endif %}
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+
+      </div>
+
+    </div>
+
+  </header>

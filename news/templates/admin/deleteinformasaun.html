@@ -1,0 +1,219 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <header> 
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'newsadmin' %}">News Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Delete Information</li>
+        </ol>
+    </header>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-danger text-white py-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                        <div>
+                            <h2 class="h4 mb-0">Confirm Deletion</h2>
+                            <p class="mb-0 opacity-75">This action cannot be undone</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4 text-center">
+                    <!-- Warning Icon -->
+                    <div class="mb-4">
+                        <i class="fas fa-trash-alt fa-4x text-danger mb-3"></i>
+                    </div>
+
+                    <!-- Information Details -->
+                    <div class="alert alert-warning border-0 bg-light-warning">
+                        <h5 class="alert-heading">You are about to delete:</h5>
+                        <h4 class="text-danger fw-bold mb-2">"{{ info.title }}"</h4>
+                        
+                        <div class="row text-start mt-3">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Category:</strong> {{ info.category.name }}</p>
+                                <p class="mb-1"><strong>Created:</strong> {{ info.created|date:"M d, Y" }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Last Updated:</strong> {{ info.updated|date:"M d, Y" }}</p>
+                                <p class="mb-0"><strong>Excerpt:</strong> {{ info.excerpt|truncatewords:20 }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warning Message -->
+                    <div class="alert alert-danger border-0">
+                        <h6 class="fw-bold mb-2"><i class="fas fa-skull-crossbones me-2"></i>Warning</h6>
+                        <p class="mb-0">
+                            This action will permanently delete this information from the system. 
+                            All associated data will be lost and cannot be recovered.
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <!-- Cancel Button -->
+                        <a href="{% url 'newsadmin' %}" class="btn btn-success btn-lg px-4">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                        
+                        <!-- Delete Button with Confirmation Modal -->
+                        <button type="button" class="btn btn-danger btn-lg px-4" data-bs-toggle="modal" data-bs-target="#finalConfirmModal">
+                            <i class="fas fa-trash me-2"></i>Delete Permanently
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information Card -->
+            <div class="card mt-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-info-circle me-2 text-primary"></i>What will be deleted?</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-check-circle text-danger me-2"></i>
+                            Information title and content
+                        </li>
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-check-circle text-danger me-2"></i>
+                            Featured image and attachments
+                        </li>
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-check-circle text-danger me-2"></i>
+                            Publication history
+                        </li>
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-times-circle text-success me-2"></i>
+                            <span class="text-muted">Category (will remain for other information)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Final Confirmation Modal -->
+<div class="modal fade" id="finalConfirmModal" tabindex="-1" aria-labelledby="finalConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="finalConfirmModalLabel">
+                    <i class="fas fa-radiation me-2"></i>Final Confirmation
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="mb-3">
+                    <i class="fas fa-exclamation-circle fa-3x text-danger"></i>
+                </div>
+                <h6 class="fw-bold mb-3">Are you absolutely sure?</h6>
+                <p class="text-muted mb-4">
+                    This is your last chance to cancel. Once deleted, the information 
+                    "<strong>{{ info.title }}</strong>" will be gone forever.
+                </p>
+                
+                <!-- Security Check -->
+                <div class="mb-3 p-3 bg-light rounded">
+                    <label for="confirmText" class="form-label small text-muted">
+                        Type <strong>DELETE</strong> to confirm:
+                    </label>
+                    <input type="text" class="form-control text-center" id="confirmText" 
+                           placeholder="Type DELETE here" onkeyup="checkDeleteConfirmation()">
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center border-0">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-arrow-left me-2"></i>Go Back
+                </button>
+                <form method="post" action="{% url 'deleteinfo' info.hashed %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" id="finalDeleteBtn" class="btn btn-danger px-4" disabled>
+                        <i class="fas fa-bomb me-2"></i>Yes, Delete Permanently
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function checkDeleteConfirmation() {
+    const confirmText = document.getElementById('confirmText');
+    const deleteBtn = document.getElementById('finalDeleteBtn');
+    
+    if (confirmText.value.toUpperCase() === 'DELETE') {
+        deleteBtn.disabled = false;
+        confirmText.classList.remove('is-invalid');
+        confirmText.classList.add('is-valid');
+    } else {
+        deleteBtn.disabled = true;
+        confirmText.classList.remove('is-valid');
+        confirmText.classList.add('is-invalid');
+    }
+}
+
+// Add some interactive effects
+document.addEventListener('DOMContentLoaded', function() {
+    // Add pulsing effect to delete button
+    const deleteBtn = document.querySelector('[data-bs-target="#finalConfirmModal"]');
+    setInterval(() => {
+        deleteBtn.classList.toggle('pulse-danger');
+    }, 2000);
+    
+    // Focus management
+    const finalConfirmModal = document.getElementById('finalConfirmModal');
+    finalConfirmModal.addEventListener('shown.bs.modal', function () {
+        document.getElementById('confirmText').focus();
+    });
+});
+</script>
+
+<style>
+.pulse-danger {
+    animation: pulse-danger 2s infinite;
+}
+
+@keyframes pulse-danger {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+.bg-light-warning {
+    background-color: rgba(255, 193, 7, 0.1) !important;
+}
+
+.card {
+    border-radius: 0.5rem;
+}
+
+.btn-lg {
+    border-radius: 0.375rem;
+    font-weight: 600;
+}
+
+.list-group-item {
+    border: none;
+    padding: 0.75rem 0;
+}
+
+.modal-content {
+    border-radius: 0.5rem;
+}
+</style>
+{% endblock %}

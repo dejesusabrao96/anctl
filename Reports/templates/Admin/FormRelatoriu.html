@@ -1,0 +1,520 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <header> 
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'lista_relatoriuAdmin' %}">Lista Relatóriu</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+        </ol>
+    </header>
+     {% if messages %}
+            {% for message in messages %}
+                <div id="divmessage" class="alert alert-{{ message.tags }} alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white py-4">
+                    <div class="text-center">
+                        <i class="fas fa-file-pdf fa-2x mb-3"></i>
+                        <h1 class="h3 mb-0">Formuláriu Relatóriu</h1>
+                        <p class="mb-0 opacity-75">Preenche informasaun kona-ba relatóriu foun</p>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    <!-- Progress Indicator -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center small text-muted mb-2">
+                            <span>Progressu Formuláriu</span>
+                            <span id="progress-text">0% Kompletu</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div id="form-progress" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" id="relatoriu-form" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Seksaun 1: Informasaun Básiku -->
+                        <div class="form-section mb-5">
+                            <div class="section-header mb-4">
+                                <h4 class="text-primary mb-2">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Informasaun Básiku
+                                </h4>
+                                <p class="text-muted mb-0">Informasaun prinsipál kona-ba relatóriu</p>
+                            </div>
+
+                            <!-- Títulu Field -->
+                            <div class="mb-4">
+                                <label for="{{ form.titulu.id_for_label }}" class="form-label fw-bold">
+                                    {{ form.titulu.label }} <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-heading text-primary"></i>
+                                    </span>
+                                    {{ form.titulu }}
+                                </div>
+                                {% if form.titulu.help_text %}
+                                    <div class="form-text mt-2">
+                                        <i class="fas fa-lightbulb text-warning me-1"></i>
+                                        {{ form.titulu.help_text }}
+                                    </div>
+                                {% endif %}
+                                {% if form.titulu.errors %}
+                                    <div class="alert alert-danger mt-2 p-2 small">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                        {{ form.titulu.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Tipu Relatóriu no Data -->
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="{{ form.tipu_relatoriu.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.tipu_relatoriu.label }}
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light">
+                                                <i class="fas fa-tag text-primary"></i>
+                                            </span>
+                                            {{ form.tipu_relatoriu }}
+                                        </div>
+                                        {% if form.tipu_relatoriu.help_text %}
+                                            <div class="form-text mt-2">{{ form.tipu_relatoriu.help_text }}</div>
+                                        {% endif %}
+                                        {% if form.tipu_relatoriu.errors %}
+                                            <div class="alert alert-danger mt-2 p-2 small">
+                                                {{ form.tipu_relatoriu.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="{{ form.data.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.data.label }}
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light">
+                                                <i class="fas fa-calendar text-primary"></i>
+                                            </span>
+                                            {{ form.data }}
+                                        </div>
+                                        {% if form.data.help_text %}
+                                            <div class="form-text mt-2">{{ form.data.help_text }}</div>
+                                        {% endif %}
+                                        {% if form.data.errors %}
+                                            <div class="alert alert-danger mt-2 p-2 small">
+                                                {{ form.data.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seksaun 2: Arquivu no Deskrisaun -->
+                        <div class="form-section mb-5">
+                            <div class="section-header mb-4">
+                                <h4 class="text-primary mb-2">
+                                    <i class="fas fa-file-upload me-2"></i>
+                                    Arquivu no Deskrisaun
+                                </h4>
+                                <p class="text-muted mb-0">Upload arquivu PDF no deskrisaun relatóriu</p>
+                            </div>
+
+                            <!-- Arquivu PDF -->
+                            <div class="mb-4">
+                                <label for="{{ form.arquivu_pdf.id_for_label }}" class="form-label fw-bold">
+                                    {{ form.arquivu_pdf.label }} <span class="text-danger">*</span>
+                                </label>
+                                <div class="file-upload-area" id="file-upload-area">
+                                    <div class="file-upload-content text-center py-5">
+                                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                        <h5 class="text-muted mb-2">Klik hodi upload arquivu PDF</h5>
+                                        <p class="text-muted small mb-3">Tamanha máximu: 10MB</p>
+                                        {{ form.arquivu_pdf }}
+                                        <div class="mt-3">
+                                            <button type="button" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-folder-open me-1"></i>Hili Arquivu
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="file-preview mt-3 d-none" id="file-preview">
+                                        <div class="alert alert-success d-flex align-items-center">
+                                            <i class="fas fa-file-pdf fa-2x text-danger me-3"></i>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1" id="file-name">naran_arquivu.pdf</h6>
+                                                <small class="text-muted" id="file-size">0 KB</small>
+                                            </div>
+                                            <button type="button" class="btn-close" id="remove-file"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if form.arquivu_pdf.help_text %}
+                                    <div class="form-text mt-2">
+                                        <i class="fas fa-info-circle text-primary me-1"></i>
+                                        {{ form.arquivu_pdf.help_text }}
+                                    </div>
+                                {% endif %}
+                                {% if form.arquivu_pdf.errors %}
+                                    <div class="alert alert-danger mt-2 p-2 small">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>
+                                        {{ form.arquivu_pdf.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Deskrisaun -->
+                            <div class="mb-4">
+                                <label for="{{ form.deskrisaun.id_for_label }}" class="form-label fw-bold">
+                                    {{ form.deskrisaun.label }}
+                                </label>
+                                <div class="position-relative">
+                                    {{ form.deskrisaun }}
+                                    <div class="position-absolute bottom-0 end-0 p-2">
+                                        <small class="text-muted" id="deskrisaun-counter">0/5000 karakter</small>
+                                    </div>
+                                </div>
+                                {% if form.deskrisaun.help_text %}
+                                    <div class="form-text mt-2">{{ form.deskrisaun.help_text }}</div>
+                                {% endif %}
+                                {% if form.deskrisaun.errors %}
+                                    <div class="alert alert-danger mt-2 p-2 small">
+                                        {{ form.deskrisaun.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Botão Asaun -->
+                        <div class="form-section">
+                            <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+                                <a href="{% url 'lista_relatoriuAdmin' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-1"></i> Fila ba Lista
+                                </a>
+                                    <button type="submit" name="save_and_add_another" class="btn btn-outline-primary">
+                                        <i class="fas fa-plus-circle me-1"></i> Rai no Aumenta Tan
+                                    </button>
+                                    <button type="submit" class="btn btn-success px-4">
+                                        <i class="fas fa-save me-1"></i> Rai Relatóriu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Informasaun Ajuda -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 text-primary">
+                                <i class="fas fa-question-circle me-2"></i>
+                                Dikusaun Importante
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    <strong>Títulu:</strong> Tenke deskritivu no klaru
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    <strong>Tipu Relatóriu:</strong> Hili kategoria ne'ebé apropriadu
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    <strong>Arquivu:</strong> Deit PDF ho tamanha 10MB
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    <strong>Data:</strong> La bele data iha futuru
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 text-primary">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                Dikusaun ba Format
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-file-pdf text-danger me-2"></i>
+                                    <strong>PDF:</strong> Relatóriu final, analíze, prezentasaun
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-chart-bar text-warning me-2"></i>
+                                    <strong>Relatóriu Estatístiku:</strong> Dados no gráfiku
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar-check text-info me-2"></i>
+                                    <strong>Relatóriu Trimestral:</strong> Atividade kada trimestre
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar-alt text-success me-2"></i>
+                                    <strong>Relatóriu Anual:</strong> Rezumu tinan ida nian
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Kontador karakter ba deskrisaun
+    const deskrisaunField = document.getElementById('{{ form.deskrisaun.id_for_label }}');
+    const deskrisaunCounter = document.getElementById('deskrisaun-counter');
+    
+    if (deskrisaunField && deskrisaunCounter) {
+        function updateDeskrisaunCounter() {
+            const length = deskrisaunField.value.length;
+            deskrisaunCounter.textContent = length + '/5000 karakter';
+            
+            // Muda kór bazeia ba kontador
+            if (length > 4500) {
+                deskrisaunCounter.className = 'text-danger';
+            } else if (length > 3000) {
+                deskrisaunCounter.className = 'text-warning';
+            } else {
+                deskrisaunCounter.className = 'text-muted';
+            }
+        }
+        
+        deskrisaunField.addEventListener('input', updateDeskrisaunCounter);
+        updateDeskrisaunCounter();
+    }
+
+    // File upload functionality
+    const fileInput = document.getElementById('{{ form.arquivu_pdf.id_for_label }}');
+    const fileUploadArea = document.getElementById('file-upload-area');
+    const filePreview = document.getElementById('file-preview');
+    const fileName = document.getElementById('file-name');
+    const fileSize = document.getElementById('file-size');
+    const removeFileBtn = document.getElementById('remove-file');
+
+    if (fileInput) {
+        // Click file upload area to trigger file input
+        fileUploadArea.addEventListener('click', function(e) {
+            if (e.target !== fileInput && e.target.tagName !== 'BUTTON') {
+                fileInput.click();
+            }
+        });
+
+        // Handle file selection
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                const fileSizeKB = Math.round(file.size / 1024);
+                
+                fileName.textContent = file.name;
+                fileSize.textContent = fileSizeKB + ' KB';
+                
+                // Show preview and hide upload prompt
+                fileUploadArea.querySelector('.file-upload-content').classList.add('d-none');
+                filePreview.classList.remove('d-none');
+            }
+        });
+
+        // Remove file
+        removeFileBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            fileInput.value = '';
+            filePreview.classList.add('d-none');
+            fileUploadArea.querySelector('.file-upload-content').classList.remove('d-none');
+        });
+    }
+
+    // Form progress tracking
+    function updateFormProgress() {
+        const form = document.getElementById('relatoriu-form');
+        let filledFields = 0;
+        const totalFields = 4; // titulu, tipu_relatoriu, arquivu_pdf, data
+        
+        // Check titulu
+        const titulu = document.getElementById('{{ form.titulu.id_for_label }}');
+        if (titulu && titulu.value.trim().length >= 5) filledFields++;
+        
+        // Check arquivu_pdf
+        if (fileInput && fileInput.files.length > 0) filledFields++;
+        
+        // Check tipu_relatoriu
+        const tipuRelatoriu = document.getElementById('{{ form.tipu_relatoriu.id_for_label }}');
+        if (tipuRelatoriu && tipuRelatoriu.value) filledFields++;
+        
+        // Check data
+        const data = document.getElementById('{{ form.data.id_for_label }}');
+        if (data && data.value) filledFields++;
+        
+        const progressPercentage = Math.round((filledFields / totalFields) * 100);
+        const progressBar = document.getElementById('form-progress');
+        const progressText = document.getElementById('progress-text');
+        
+        progressBar.style.width = `${progressPercentage}%`;
+        progressText.textContent = `${progressPercentage}% Kompletu`;
+        
+        // Muda kór bazeia ba progressu
+        if (progressPercentage < 30) {
+            progressBar.className = 'progress-bar bg-danger';
+        } else if (progressPercentage < 70) {
+            progressBar.className = 'progress-bar bg-warning';
+        } else {
+            progressBar.className = 'progress-bar bg-success';
+        }
+    }
+    
+    // Initialize form progress tracking
+    const formFields = document.querySelectorAll('#relatoriu-form input, #relatoriu-form select, #relatoriu-form textarea');
+    formFields.forEach(field => {
+        field.addEventListener('input', updateFormProgress);
+        field.addEventListener('change', updateFormProgress);
+    });
+    
+    updateFormProgress();
+
+    // Preview button functionality
+    document.getElementById('preview-btn').addEventListener('click', function() {
+        // Iha futuru, bele implementa preview functionality ne'ebé hatudu informasaun hotu
+        alert('Preview functionality sei hatudu informasaun relatóriu antes rai.');
+    });
+
+    // Set data atual se vaziu
+    const dataField = document.getElementById('{{ form.data.id_for_label }}');
+    if (dataField && !dataField.value) {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        dataField.value = now.toISOString().slice(0, 16);
+    }
+
+    // Drag and drop functionality for file upload
+    fileUploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+
+    fileUploadArea.addEventListener('dragleave', function() {
+        this.classList.remove('drag-over');
+    });
+
+    fileUploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            fileInput.dispatchEvent(new Event('change'));
+        }
+    });
+});
+</script>
+
+<style>
+.form-section {
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+
+.section-header {
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.file-upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: 0.5rem;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload-area:hover {
+    border-color: #86b7fe;
+    background: #e7f1ff;
+}
+
+.file-upload-area.drag-over {
+    border-color: #0d6efd;
+    background: #d4edda;
+}
+
+.file-upload-content {
+    pointer-events: none;
+}
+
+.file-upload-area:hover .file-upload-content {
+    transform: translateY(-2px);
+}
+
+.file-upload-area input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.input-group-text {
+    border-right: none;
+}
+
+.form-control {
+    border-left: none;
+}
+
+.card {
+    border-radius: 0.5rem;
+}
+
+.progress {
+    border-radius: 0.375rem;
+}
+
+.btn {
+    border-radius: 0.375rem;
+    font-weight: 500;
+}
+
+.position-relative textarea {
+    padding-bottom: 2.5rem;
+}
+</style>
+{% endblock %}

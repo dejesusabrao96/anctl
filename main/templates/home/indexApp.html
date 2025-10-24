@@ -1,0 +1,10 @@
+{% extends 'main/layout.html' %} 
+{% load static %}
+{% block content %}
+	{% if user.is_authenticated %}
+		{% if user.groups.all.0.name == 'Admin' %}
+			{% include 'home/indexAdmin.html' %}
+		
+	{% endif %}
+	{% endif %}
+{% endblock %}
