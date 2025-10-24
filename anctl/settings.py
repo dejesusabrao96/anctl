@@ -116,16 +116,16 @@ WSGI_APPLICATION = 'anctl.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'railway'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'LjeAxXgvZZtQexdNkwRSULHeAovLpAhY'),
-        'HOST': os.getenv('DB_HOST', 'shortline.proxy.rlwy.net'),
-        'PORT': os.getenv('DB_PORT', '28876'),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        },
+        'NAME': 'railway',
+        'USER': 'root',
+        'PASSWORD': 'LjeAxXgvZZtQexdNkwRSULHeAovLpAhY',
+        'HOST': 'shortline.proxy.rlwy.net',
+        'PORT': '28876',
     }
 }
+
+
+
 
 
 # Password validation
